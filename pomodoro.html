@@ -1,98 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-    <script src = "//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-<style type="text/css">
-#clockface {
-  background-color: white;
-  height: 100px;
-  margin-top: 100px;
-  color: #007A87;
-  font-size: 60px;
-  text-align: center;
-  border: 3px solid;
-  border-radius: 35px;
-  padding-top:5px;
-}
-
-.btn {
-  height: 50px;
-  margin-top: 50px;
-  color: white;
-  font-weight: bold;
-  font-size: 20px;
-  border: 1px solid white;
-  border-radius: 17px;
-}
-
-#start {
-  background-color: #1ED760;
-}
-
-#pause {
-  background-color: #FFCF31;
-}
-
-#reset {
-  background-color: #DA552F;
-}
-
-.plusMinus {
-  margin-top: 20px;
-}
-
-.row {
-  margin-top:30px;
-}
-
-.timeIntervals {
-  margin-top:20px;
-  text-align: center;
-  font-weight:bold;
-  font-size:18px;
-  
-}
-
-.periods {
-  text-align:center;
-  margin-top: 30px;
-  color: #007A87;
-  margin-bottom:50px;
-  border: 2px solid;
-  border-radius: 25px;
-  padding-bottom: 20px;
-}
-
-#workTime {
-  padding-left:1px;
-}
-
-#breakTime {
-  padding-left:3px;
-}
-
-.glyphicon {
-  cursor: pointer;
-}
-
-</style>
-
-<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="app.js"></script>
 </head>
+
 <body>
-<div id="clockface" class="col-md-6 col-xs-12 col-md-offset-3">
+  <div id="clockface" class="col-md-6 col-xs-12 col-md-offset-3">
   </div>
+
   <div id="startButtonDiv" class="col-md-2 col-xs-3 col-md-offset-3">
     <button class="btn col-md-10 col-md-offset-1 col-xs-12 col-xs-offset-6" id="start">Start</button>
   </div>
+
   <div id="pauseButtonDiv" class="col-md-2 col-xs-3">
     <button class="btn col-md-10  col-md-offset-1 col-xs-12 col-xs-offset-6" id="pause">Pause</button>
   </div>
+  
   <div id="resetButtonDiv" class="col-md-2 col-xs-3">
     <button class="btn col-md-10  col-md-offset-1 col-xs-12 col-xs-offset-6" id="reset">Reset</button>
   </div>
+
   <br />
+  
   <div class="periods col-md-2 col-md-offset-3 col-xs-3 col-xs-offset-2">
     <h3 class="timeModTitles">Work Interval</h3>
     <div id="decreaseTime" class="col-md-1 col-md-offset-3 col-xs-1 col-xs-offset-1">
@@ -103,6 +35,7 @@
       <span class="glyphicon glyphicon-plus plusMinus" id="plus"></span>
     </div>
   </div>
+
   <div class="periods col-md-2 col-md-offset-2 col-xs-3 col-xs-offset-1">
     <h3 class="timeModTitles">Break Interval</h3>
     <div id="decreaseBreak" class="col-md-1 col-md-offset-3 col-xs-1 col-xs-offset-1">
@@ -113,104 +46,5 @@
       <span class="glyphicon glyphicon-plus plusMinus" id="plusBreak"></span>
     </div>
   </div>
-
-  <script type = "text/javascript">
-
-  $(document).ready(function(){
-  var workInterval = 25;
-  var breakInterval = 5;
-  var seconds = 60;
-  var minutes = workInterval - 1;
-  var counter = (workInterval-1) * 60;
-  var breakCounter = breakInterval*60;
-  var run;
-  var isBreak = false;
-  $("#clockface").html(workInterval + ":" + 00);
-  $("#workTime").html(workInterval);
-  $("#breakTime").html(breakInterval);
-  
-  function secondCountdown(){
-    if(seconds > 0){
-      seconds = seconds - 1; //while the second count is higher than 0, the value of seconds decreases
-      $("#clockface").html(minutes + ":" + seconds);
-      counter = counter - 1; //the counter decreases as each second decreases
-      if (isBreak === true){
-        breakCounter = breakCounter-1; //the isBreak variable becomes true whenever the main work interval countdown hits 0. When this happens, break counter decreases every second.
-      }
-    } else {
-      minutes = minutes - 1; //when the seconds hits 0, the minutes decreases by 1
-      seconds = 60; //the number of seconds resets to 60 again
-    }
-    if(counter === 0){ //this runs when the counter hits 0, meaning the work interval has stopped
-      minutes = breakInterval - 1; //resets the value of the minutes to breakInterval
-      seconds = 60;
-      isBreak = true;
-      alert("Break time!")
-    }
-    if(breakCounter === 0){ //once the break counter hits 0, the break has finished
-      clearInterval(run); //stops the interval when break ends
-      alert("Break's over!");
-    }
-  }
-  
-  function countdown(){  
-    run = setInterval(secondCountdown, 1000); //causes the secondCountdown function to run every second
-  }
-  
-  $("#start").click(function(){
-    //alert(counter);
-    countdown();
-  })
-  
-  $("#pause").click(function(){
-    clearInterval(run); //pauses the interval
-    //alert(counter);
-  })
-  
-  $("#reset").click(function stop(){
-    clearInterval(run); //stops the interval
-    minutes = workInterval-1;
-    counter = workInterval * 60; //resets the breakCounter to the number seconds in the break interval
-    breakCounter = breakInterval * 60; //resets the breakCounter to the number seconds in the break interval
-    seconds = 59;
-    $("#clockface").html(workInterval + ":" + 00); //displays the reset values for minutes and seconds
-  })
-  
-  $("#minus").click(function(){
-    workInterval = workInterval - 1; //starts the minutes to start at 24:59 instead of 25:59
-    counter = workInterval * 60;
-    minutes = workInterval-1;
-    $("#clockface").html(workInterval + ":" + 00); //displays the work interval on the clock face
-    $("#workTime").html(workInterval); //displays the work interval
-    return workInterval;
-  });
-  
-  $("#plus").click(function(){
-    workInterval = workInterval + 1; //starts the minutes to start at 24:59 instead of 25:59
-    minutes = workInterval-1;
-    counter = workInterval * 60;
-    $("#clockface").html(workInterval + ":" + 00); //displays the work interval on the clock face
-    $("#workTime").html(workInterval);
-    return workInterval;
-  });
-  
-  $("#minusBreak").click(function(){
-    breakInterval = breakInterval - 1;
-    //minutes = breakInterval - 1;
-    breakCounter = breakInterval * 60;
-    $("#breakTime").html(breakInterval);
-    return breakInterval;
-  });
-  
-  $("#plusBreak").click(function(){
-    breakInterval = breakInterval + 1;
-    //minutes = breakInterval - 1;
-    breakCounter = breakInterval * 60;
-    $("#breakTime").html(breakInterval);
-    return breakInterval;
-  });
-});
-  </script>
 </body>
-
 </html>
